@@ -1,0 +1,37 @@
+﻿@model List<WebApplication1.Models.SACH>
+
+@{
+    ViewBag.Title = "Danh Sách Sách Mới";
+    Layout = "~/Views/Shared/UserLayout.cshtml";
+}
+
+<h2>Sách Mới Cập Nhật</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var s in Model) // Đổi tên biến sách thành 's' để khớp với ví dụ
+        {
+            <div class="col-lg-3 card mr-2 mt-2 text-center">
+                <!-- Thêm card-group hoặc chỉ cần card trực tiếp -->
+                <div class="card-product-group">
+                    <img style="width:300px; height:350px;" class="card-img-top mt-2 src-content"
+                         src="~/Content/Hinh/@s.AnhBia" alt="@s.TenSach" />
+                    <!-- Điều chỉnh đường dẫn src và kích thước -->
+                    <div class="card-body">
+                        <h5 style="font-size:30px;" class="card-title">@s.TenSach</h5>
+
+                        <!-- Nút "Chi Tiết" -->
+                        <a href="@Url.Action("Details", "Sach", new { id = s.MaSach.Trim() })" class="btn btn-warning">ChiTiet</a>
+                        <!-- Nút "Chọn" (thường dùng cho chức năng thêm vào giỏ hàng) -->
+                        @Html.ActionLink("Chọn", "ThemVaoGio", "Home", new { id = s.MaSach }, new { @class = "btn btn-warning" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Không có sách nào được tìm thấy.</p>
+}

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<WebApplication1.Models.SACH>
+
+<h2>@ViewBag.TenChuDe</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <img src="~/Content/HinhAnh/@item.AnhBia" class="card-img-top" style="height:200px; object-fit:cover;" />
+                <div class="card-body">
+                    <h5>@item.TenSach</h5>
+                    <p>@item.GiaBan?.ToString("N0") VNĐ</p>
+                    <a href="@Url.Action("Details", "Sach", new { id = item.MaSach })" class="btn btn-primary">Chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

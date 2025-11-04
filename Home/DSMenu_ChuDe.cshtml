@@ -1,0 +1,10 @@
+﻿@model IEnumerable<WebApplication1.Models.CHUDE>
+
+<ul class="list-group">
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item">
+            @Html.ActionLink(item.TenChuDe, "SachTheoChuDe", "Home", new { id = item.MaChuDe }, null)
+        </li>
+    }
+</ul>

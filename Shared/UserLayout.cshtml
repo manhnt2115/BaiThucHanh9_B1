@@ -1,0 +1,60 @@
+﻿@using WebApplication1.Models
+@{
+    var data = new Model1(); // thêm dòng này để lấy danh sách CD & NXB hiển thị ở menu
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Trang Quản Lý Sách</title>
+
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Cột bên trái cho menu -->
+            <div class="col-md-3">
+                <h3 class="bg-success text-white p-2 rounded">CHỦ ĐỀ</h3>
+                <ul class="list-unstyled">
+                    @foreach (var cd in data.CHUDEs.OrderBy(c => c.TenChuDe).ToList())
+                    {
+                        <li>
+                            <a href="@Url.Action("SachTheoChuDe", "Home", new { id = cd.MaChuDe })"
+                               class="d-block py-1 text-dark text-decoration-none">
+                                @cd.TenChuDe
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <h3 class="bg-success text-white p-2 rounded">NHÀ XUẤT BẢN</h3>
+                <ul class="list-unstyled">
+                    @foreach (var nxb in data.NHAXUATBANs.OrderBy(n => n.TenNXB).ToList())
+                    {
+                        <li>
+                            <a href="@Url.Action("SachTheoNXB", "Home", new { id = nxb.MaNXB })"
+                               class="d-block py-1 text-dark text-decoration-none">
+                                @nxb.TenNXB
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Cột bên phải cho nội dung -->
+            <div class="col-md-9">
+                <img src="~/Content/Hinh/hinh0.jpg"
+                     style="max-width: 1200px; height: auto; display: block; margin-bottom: 20px;" />
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
