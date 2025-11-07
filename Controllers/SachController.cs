@@ -2,12 +2,17 @@
 using System.Web.Mvc;
 using System.Data.Entity;
 using WebApplication1.Models;
+using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
     public class SachController : Controller
     {
         private Model1 db = new Model1();
+        // Fix for CS1061: Ensure that the 'Model1' class has a DbSet<MAUSAC> property defined.
+        // Add the following property to the 'Model1' class definition.
+
+        public virtual DbSet<MAUSAC> MAUSACs { get; set; }
 
         public ActionResult Details(string id)
         {
@@ -79,7 +84,51 @@ namespace WebApplication1.Controllers
             ViewBag.TenNXB = nxb != null ? nxb.TenNXB : "Không xác định";
             return View(sach);
         }
+        public ActionResult ThemSanPham()
+        {
+            return View();
+        }
 
+        // POST: Thêm sản phẩm
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ThemSanPham(SACH sanPham, List<string> TenMau)
+        {
+            if (ModelState.IsValid)
+            {
+                db.SACHes.Add(sanPham);
+                db.SaveChanges();
+
+                // Lưu danh sách màu
+                if (TenMau != null)
+                {
+                    foreach (var mau in TenMau)
+                    {
+                        if (!string.IsNullOrEmpty(mau))
+                        {
+                            db.THAMGIAs.Add(new MAUSAC)
+                            {
+                                MaSach = int.Parse(sanPham.MaSach), // Convert MaSach to int
+                                TenMau = mau
+                            });
+                        }
+                    }
+                    db.SaveChanges();
+                }
+
+                ViewBag.ThongBao = "Thêm sản phẩm và màu thành công!";
+                return RedirectToAction("DanhSachSanPham");
+            }
+
+            return View(sanPham);
+        }
+
+        // Danh sách sản phẩm để xem thử
+        public ActionResult DanhSachSanPham()
+        {
+            var ds = db.SACHes.Include("MAUSACs").ToList();
+            return View(ds);
+        }
 
     }
 }
